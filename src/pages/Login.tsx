@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { User, Lock } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
-import axios from "axios"; // Biblioteca para chamadas HTTP
+import axios from "axios"; 
 
-// 1. URL DA API C# (VERIFIQUE SUA PORTA! O padrão é 7143)
+// URL DA API C# (VERIFIQUE SUA PORTA!)
 const API_URL = "https://localhost:7143/api/Auth/login"; 
 
 const Login = () => {
@@ -14,10 +14,9 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => { 
     e.preventDefault();
 
-    // Validação básica de campos
     if (!username || !password) {
       toast({
         title: "Erro de autenticação",
@@ -28,7 +27,7 @@ const Login = () => {
     }
 
     try {
-      // 2. REQUISIÇÃO REAL AO BACKEND C#
+      // REQUISIÇÃO REAL AO BACKEND C#
       const response = await axios.post(API_URL, {
         username: username,
         password: password,
@@ -36,7 +35,7 @@ const Login = () => {
 
       const { token, role } = response.data; // Recebe o token e a role
 
-      // 3. SALVAR O TOKEN E A ROLE
+      // SALVAR O TOKEN E A ROLE
       localStorage.setItem("authToken", token);
       localStorage.setItem("userRole", role);
 
@@ -45,22 +44,18 @@ const Login = () => {
         description: `Bem-vindo! Redirecionando para o painel de ${role}...`,
       });
 
-      // 4. CORREÇÃO DE REDIRECIONAMENTO: Usando as rotas curtas do App.tsx
+      // CORREÇÃO AQUI: REDIRECIONAMENTO PARA AS ROTAS CORRETAS REGISTRADAS NO APP.TSX
       if (role === "Admin") {
-        // Redireciona para a rota '/admin' (que carrega o AdminDashboard)
-        navigate("/admin"); 
+        navigate("/AdminDashboard"); // ROTA CORRETA
       } else if (role === "Entregador") {
-        // Redireciona para a rota '/delivery' (que carrega o DeliveryDashboard)
-        navigate("/delivery"); 
+        navigate("/DeliveryConfirmation"); // ROTA CORRETA
       } else {
         navigate("/"); 
       }
-      
     } catch (error) {
-      // 5. TRATAMENTO DE ERROS
+      // TRATAMENTO DE ERROS
       let errorMessage = "Credenciais inválidas. Tente novamente.";
       if (axios.isAxiosError(error) && error.response) {
-        // Captura a mensagem de erro que o backend C# enviou
         errorMessage = error.response.data.message || "Credenciais inválidas.";
       }
 

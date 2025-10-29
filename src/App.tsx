@@ -1,48 +1,42 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+// /src/App.tsx (CÓDIGO FINAL CORRIGIDO)
 
-// =========================================================
-// IMPORTS DOS COMPONENTES (GARANTIR QUE TODOS EXISTAM!)
-// =========================================================
-import Login from "./pages/Login";
-import DeliveryDashboard from "./pages/DeliveryDashboard"; // Rota /delivery
-import DeliveryConfirmation from "./pages/DeliveryConfirmation"; // Rota /delivery/confirm/:clientId
-import AdminDashboard from "./pages/AdminDashboard"; // Rota /admin
-import AdminCadastroEntregador from "./pages/AdminCadastroEntregador"; // ROTA NOVA!
-import NotFound from "./pages/NotFound";
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-const queryClient = new QueryClient();
+// --- Imports dos Componentes da Página (TUDO DEVE ESTAR AQUI) ---
+import Login from './pages/Login.tsx';
+import AdminDashboard from './pages/AdminDashboard.tsx'; 
+import AdminCadastroEntregador from './pages/AdminCadastroEntregador.tsx'; 
+import CriarRota from './pages/CriarRota.tsx'; // O ARQUIVO FALTANTE AGORA ESTÁ IMPORTADO
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          {/* 1. ROTA DE AUTENTICAÇÃO */}
-          <Route path="/" element={<Login />} />
+import DeliveryConfirmation from './pages/DeliveryConfirmation.tsx'; 
+import DeliveryDashboard from './pages/DeliveryDashboard.tsx';
+import NotFound from './pages/NotFound.tsx'; 
 
-          {/* 2. ROTAS DO ENTREGADOR (Corrigidas para /delivery) */}
-          <Route path="/delivery" element={<DeliveryDashboard />} />
-          <Route path="/delivery/confirm/:clientId" element={<DeliveryConfirmation />} />
 
-          {/* 3. ROTAS DO ADMINISTRADOR */}
-          <Route path="/admin" element={<AdminDashboard />} /> 
-          
-          {/* ROTA DE CADASTRO UNIFICADA (Para o botão no Dashboard) */}
-          <Route path="/admin/cadastrar-entregador" element={<AdminCadastroEntregador />} /> 
-
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          {/* Rota 404 - Captura qualquer caminho não definido */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+    return (
+        <BrowserRouter>
+            <Routes>
+                {/* 1. Rota Raiz (Login) */}
+                <Route path="/" element={<Login />} />
+                
+                {/* 2. ROTAS DO ADMINISTRADOR */}
+                <Route path="/AdminDashboard" element={<AdminDashboard />} /> 
+                <Route path="/Admin/CadastrarEntregador" element={<AdminCadastroEntregador />} /> 
+                
+                {/* 3. ROTA DE EXPEDIÇÃO (RESOLVE O ERRO 404) */}
+                <Route path="/Admin/CriarRota" element={<CriarRota />} />
+                
+                {/* 4. ROTAS DO ENTREGADOR */}
+                <Route path="/DeliveryConfirmation" element={<DeliveryConfirmation />} />
+                <Route path="/DeliveryDashboard" element={<DeliveryDashboard />} />
+                
+                {/* 5. Rota 404 */}
+                <Route path="*" element={<NotFound />} />
+            </Routes>
+        </BrowserRouter>
+    );
+};
 
 export default App;
